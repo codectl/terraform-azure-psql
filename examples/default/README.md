@@ -1,0 +1,1 @@
+This example illustrates the default postgresql setup, in its simplest form.

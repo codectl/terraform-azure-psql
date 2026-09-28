@@ -1,0 +1,1 @@
+This example illustrates configuring multiple databases.

@@ -1,0 +1,1 @@
+This example details customer managed key integration.
