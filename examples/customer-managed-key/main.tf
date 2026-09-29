@@ -1,25 +1,34 @@
 module "naming" {
-  source  = "cloudnationhq/naming/azure"
-  version = "~> 0.32"
+  source  = "codectl/naming/azure"
+  version = "~> 0.1"
 
   suffix = ["demo", "dev"]
 }
 
+module "regions" {
+  source  = "codectl/locations/azure"
+  version = "~> 1.0"
+
+  location = {
+    primary = "northeurope"
+  }
+}
+
 module "rg" {
-  source  = "cloudnationhq/rg/azure"
-  version = "~> 3.0"
+  source  = "codectl/rg/azure"
+  version = "~> 1.0"
 
   groups = {
     demo = {
       name     = module.naming.resource_group.name_unique
-      location = "northeurope"
+      location = module.regions.location.primary.name
     }
   }
 }
 
 module "kv" {
-  source  = "cloudnationhq/kv/azure"
-  version = "~> 6.0"
+  source  = "codectl/kv/azure"
+  version = "~> 1.0"
 
 
   vault = {
@@ -64,8 +73,8 @@ module "kv" {
 }
 
 module "kv_backup" {
-  source  = "cloudnationhq/kv/azure"
-  version = "~> 6.0"
+  source  = "codectl/kv/azure"
+  version = "~> 1.0"
 
   vault = {
     name                     = "${module.naming.key_vault.name_unique}-bck"
@@ -98,8 +107,8 @@ module "kv_backup" {
 }
 
 module "identity_primary" {
-  source  = "cloudnationhq/uai/azure"
-  version = "~> 3.0"
+  source  = "codectl/uai/azure"
+  version = "~> 1.0"
 
   identity = {
     name                = module.naming.user_assigned_identity.name
@@ -109,8 +118,8 @@ module "identity_primary" {
 }
 
 module "identity_backup" {
-  source  = "cloudnationhq/uai/azure"
-  version = "~> 3.0"
+  source  = "codectl/uai/azure"
+  version = "~> 1.0"
 
   identity = {
     name                = "${module.naming.user_assigned_identity.name}-bck"
@@ -120,8 +129,8 @@ module "identity_backup" {
 }
 
 module "postgresql" {
-  source  = "cloudnationhq/psql/azure"
-  version = "~> 6.0"
+  source  = "codectl/psql/azure"
+  version = "~> 1.0"
 
   postgresql = {
     name                = module.naming.postgresql_server.name_unique
